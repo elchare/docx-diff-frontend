@@ -14,6 +14,18 @@ keywords = st.text_input("🧩 Keywords to Filter (comma-separated)", value="MUS
 case_sensitive = st.checkbox("Case sensitive match", value=True)
 whole_word = st.checkbox("Match whole words only", value=True)
 
+# Download sample file
+st.markdown("### 📥 Try with a Sample DOCX File")
+with open("sample_docxdiff.docx", "rb") as sample_file:
+    st.download_button(
+        label="📄 Download Sample DOCX File",
+        data=sample_file,
+        file_name="sample_docxdiff.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+
+st.markdown("---")
+
 uploaded_files = st.file_uploader("📁 Upload .docx file(s)", type=["docx"], accept_multiple_files=True)
 
 if st.button("🚀 Process Files") and uploaded_files:
