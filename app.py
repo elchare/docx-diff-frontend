@@ -16,7 +16,7 @@ whole_word = st.checkbox("Match whole words only", value=True)
 
 # Download sample file
 st.markdown("### 📥 Try with a Sample DOCX File")
-with open("sample_docxdiff.docx", "rb") as sample_file:
+with open("examples/sample_docxdiff.docx", "rb") as sample_file:
     st.download_button(
         label="📄 Download Sample DOCX File",
         data=sample_file,
