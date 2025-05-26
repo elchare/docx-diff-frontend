@@ -33,6 +33,7 @@ if st.button("🚀 Process Files") and uploaded_files:
         with st.spinner(f"Processing `{file.name}`..."):
             response = requests.post(
                 api_url,
+                headers={"x-api-key": st.secrets["API_KEY"]},
                 files={"file": (file.name, file.getvalue(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")},
                 data={
                     "keywords": keywords,
