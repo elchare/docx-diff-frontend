@@ -2,12 +2,21 @@ import streamlit as st
 import requests
 import os
 
+# Get API endpoint from environment variable or use default
+API_ENDPOINT = os.getenv("DOCX_DIFF_API_ENDPOINT", "https://docx-diff-api.onrender.com/process")
+IS_DEVELOPMENT = os.getenv("DOCX_DIFF_ENV", "production").lower() == "development"
+
 st.set_page_config(page_title="DOCX Diff Tool", layout="centered")
 
 st.title("📄 DOCX Tracked Changes Extractor")
 st.markdown("Upload one or more `.docx` files and extract tracked changes involving specific keywords (e.g., `MUST`, `SHOULD`, `MAY`).")
 
-api_url = st.text_input("🔗 API Endpoint (FastAPI backend)", value="https://docx-diff-api.onrender.com/process")
+# Only show API endpoint input in development mode
+if IS_DEVELOPMENT:
+    api_url = st.text_input("🔗 API Endpoint (FastAPI backend)", value=API_ENDPOINT)
+else:
+    api_url = API_ENDPOINT
+
 keywords = st.text_input("🧩 Keywords to Filter (comma-separated)", value="MUST,SHOULD,MAY")
 case_sensitive = st.checkbox("Case sensitive match", value=True)
 whole_word = st.checkbox("Match whole words only", value=True)
@@ -35,8 +44,10 @@ if st.button("🚀 Process Files") and uploaded_files:
         with st.spinner(f"Processing `{file.name}`..."):
             try:
                 headers = {}
-                if "API_KEY" in st.secrets:
+                try:
                     headers["x-api-key"] = st.secrets["API_KEY"]
+                except Exception:
+                    pass  # No API key available, skip
 
                 response = requests.post(
                     api_url,
