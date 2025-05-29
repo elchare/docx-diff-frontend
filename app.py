@@ -4,16 +4,23 @@ import os
 
 # Get API endpoint from environment variable or use default
 API_ENDPOINT = os.getenv("DOCX_DIFF_API_ENDPOINT", "https://docx-diff-api.onrender.com/process")
+LOCAL_API_ENDPOINT = "http://127.0.0.1:8001/process"
 IS_DEVELOPMENT = os.getenv("DOCX_DIFF_ENV", "production").lower() == "development"
 
 st.set_page_config(page_title="DOCX Diff Tool", layout="centered")
 
 st.title("📄 DOCX Tracked Changes Extractor")
-st.markdown("Upload one or more `.docx` files and extract tracked changes involving specific keywords (e.g., `MUST`, `SHOULD`, `MAY`).")
+st.markdown(
+        """
+        Upload one or more `.docx` files.  
+        This tool scans **tracked changes** (insertions and deletions) and extracts paragraphs that contain the selected keywords.  
+        **Note:** Keywords are matched at the **paragraph level**, not individual sentences.
+        """
+    )
 
 # Only show API endpoint input in development mode
 if IS_DEVELOPMENT:
-    api_url = st.text_input("🔗 API Endpoint (FastAPI backend)", value=API_ENDPOINT)
+    api_url = st.text_input("🔗 API Endpoint (FastAPI backend)", value=LOCAL_API_ENDPOINT)
 else:
     api_url = API_ENDPOINT
 
